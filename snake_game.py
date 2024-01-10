@@ -26,7 +26,7 @@ def main(stdscr):
 
     width, height = 20, 15
     board = create_board(width, height)
-    snake = [(width//2, height//2)]
+    snake = [(width // 2, height // 2)]
     direction = curses.KEY_RIGHT
 
     place_food(board, width, height)
@@ -47,16 +47,25 @@ def main(stdscr):
         elif direction == curses.KEY_DOWN:
             new_head = (head[0], head[1] + 1)
 
-        snake.insert(0, new_head)
-        board[new_head[1]][new_head[0]] = '#'
+        # Check for collision with walls or self
+        if (new_head[0] >= width or new_head[0] < 0 or
+            new_head[1] >= height or new_head[1] < 0 or
+            new_head in snake):
+            break  # Game over
 
+        snake.insert(0, new_head)
+
+        # Check if new head position has food
         if board[new_head[1]][new_head[0]] == '*':
             place_food(board, width, height)
+            board[new_head[1]][new_head[0]] = '#'
         else:
             tail = snake.pop()
             board[tail[1]][tail[0]] = ' '
+            board[new_head[1]][new_head[0]] = '#'
 
         print_board(stdscr, board)
+
 
 if __name__ == '__main__':
     curses.wrapper(main)
