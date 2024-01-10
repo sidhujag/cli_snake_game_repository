@@ -1,6 +1,9 @@
 import random
 import curses
 
+def init_snake(width, height):
+    return [(width // 4, height // 2)]
+
 def create_board(width, height):
     board = [[' ' for _ in range(width)] for _ in range(height)]
     return board
@@ -26,8 +29,9 @@ def main(stdscr):
 
     width, height = 20, 15
     board = create_board(width, height)
-    snake = [(width // 2, height // 2)]
+    snake = init_snake(width, height)
     direction = curses.KEY_RIGHT
+    score = 0
 
     place_food(board, width, height)
 
@@ -59,12 +63,20 @@ def main(stdscr):
         if board[new_head[1]][new_head[0]] == '*':
             place_food(board, width, height)
             board[new_head[1]][new_head[0]] = '#'
+            score += 1
         else:
             tail = snake.pop()
             board[tail[1]][tail[0]] = ' '
             board[new_head[1]][new_head[0]] = '#'
 
-        print_board(stdscr, board)
+        print_board(stdscr, board, score)
+
+def print_board(stdscr, board, score):
+    stdscr.clear()
+    for row in board:
+        stdscr.addstr(''.join(row) + '\n')
+    stdscr.addstr(f'Score: {score}\n')
+    stdscr.refresh()
 
 
 if __name__ == '__main__':
