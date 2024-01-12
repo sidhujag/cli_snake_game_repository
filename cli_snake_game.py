@@ -1,6 +1,87 @@
 import random
 import curses
 
+def init_snake(width, height):
+    return [(width // 4, height // 2)]
+
+def create_board(width, height):
+    board = [[' ' for _ in range(width)] for _ in range(height)]
+    return board
+
+def place_food(board, width, height, snake):
+    empty = False
+    while not empty:
+        x, y = random.randint(0, width-1), random.randint(0, height-1)
+        if (x, y) not in snake and board[y][x] == ' ':
+            board[y][x] = '*'
+            empty = True
+    return (x, y)
+
+def print_board(stdscr, board, score):
+    stdscr.clear()
+    for row in board:
+        stdscr.addstr(''.join(row) + '\n')
+    stdscr.addstr(f'Score: {score}\n')
+    stdscr.refresh()
+
+def get_next_position(head, direction):
+    x, y = head
+    if direction == curses.KEY_RIGHT:
+        x += 1
+    elif direction == curses.KEY_LEFT:
+        x -= 1
+    elif direction == curses.KEY_UP:
+        y -= 1
+    elif direction == curses.KEY_DOWN:
+        y += 1
+    return x, y
+
+def main(stdscr):
+    curses.curs_set(0)
+    stdscr.nodelay(1)
+    stdscr.timeout(100)
+
+    width, height = 20, 15
+    board = create_board(width, height)
+    snake = init_snake(width, height)
+    direction = curses.KEY_RIGHT
+    score = 0
+
+    food = place_food(board, width, height, snake)
+
+    while True:
+        key = stdscr.getch()
+
+        if key in [curses.KEY_RIGHT, curses.KEY_LEFT, curses.KEY_UP, curses.KEY_DOWN]:
+            direction = key
+
+        head = snake[0]
+        new_head = get_next_position(head, direction)
+
+        # Check for collision with walls or self
+        if (new_head[0] >= width or new_head[0] < 0 or
+            new_head[1] >= height or new_head[1] < 0 or
+            new_head in snake):
+            stdscr.addstr(height // 2, width // 2 - len("Game Over") // 2, "Game Over")
+            stdscr.nodelay(0)
+            stdscr.getch()
+            break
+
+        snake.insert(0, new_head)
+
+        # Check if new head position has food
+        if new_head == food:
+            food = place_food(board, width, height, snake)
+            score += 1
+        else:
+            tail = snake.pop()
+            board[tail[1]][tail[0]] = ' '
+
+        board[new_head[1]][new_head[0]] = '#'
+        print_board(stdscr, board, score)
+
+if __name__ == '__main__':
+    curses.wrapper(main)
 def create_snake(screen_width, screen_height):
     # Initial snake co-ordinates
     snake = [[screen_height//2, screen_width//4]]
