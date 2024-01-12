@@ -23,7 +23,8 @@ def game(stdscr):
     stdscr.timeout(100)
 
     screen_height, screen_width = stdscr.getmaxyx()
-    snake, food = create_snake_and_food(screen_width, screen_height)
+    snake = create_snake(screen_width, screen_height)
+    food = create_food(screen_width, screen_height, snake)
 
     score = 0
     key = curses.KEY_RIGHT
@@ -54,8 +55,17 @@ def game(stdscr):
 
         snake.insert(0, new_head)
 
+        # Check if snake has eaten the food
         if snake[0] == food:
             score += 1
+            food = create_food(screen_width, screen_height, snake)
+            stdscr.addch(food[0], food[1], curses.ACS_PI)
+        else:
+            tail = snake.pop()
+            stdscr.addch(tail[0], tail[1], ' ')
+
+        stdscr.addch(snake[0][0], snake[0][1], curses.ACS_CKBOARD)
+        print_score(stdscr, score)
             food = create_food(screen_width, screen_height, snake)
             stdscr.addch(food[0], food[1], '#')
             food = create_food(screen_width, screen_height, snake)
