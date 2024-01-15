@@ -60,7 +60,7 @@ def main(stdscr):
     direction = curses.KEY_RIGHT
     score = 0
 
-    # Initialize food position
+    # Place the first food on the board
     food = place_food(board, width, height, snake)
 
     while True:
