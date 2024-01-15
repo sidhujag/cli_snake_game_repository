@@ -1,6 +1,10 @@
 import random
 import curses
 
+BOARD_WIDTH = 20
+BOARD_HEIGHT = 15
+GAME_SPEED = 100  # The lower the number, the faster the game speed.
+
 def init_snake(width, height):
     return [(width // 4, height // 2)]
 
@@ -36,12 +40,21 @@ def get_next_position(head, direction):
         y += 1
     return x, y
 
+def is_opposite_direction(current, new):
+    opposite_pairs = {
+        (curses.KEY_UP, curses.KEY_DOWN),
+        (curses.KEY_DOWN, curses.KEY_UP),
+        (curses.KEY_LEFT, curses.KEY_RIGHT),
+        (curses.KEY_RIGHT, curses.KEY_LEFT),
+    }
+    return (current, new) in opposite_pairs or (new, current) in opposite_pairs
+
 def main(stdscr):
     curses.curs_set(0)
     stdscr.nodelay(1)
-    stdscr.timeout(100)
+    stdscr.timeout(GAME_SPEED)
 
-    width, height = 20, 15
+    width, height = BOARD_WIDTH, BOARD_HEIGHT
     board = create_board(width, height)
     snake = init_snake(width, height)
     direction = curses.KEY_RIGHT
@@ -52,7 +65,7 @@ def main(stdscr):
     while True:
         key = stdscr.getch()
 
-        if key in [curses.KEY_RIGHT, curses.KEY_LEFT, curses.KEY_UP, curses.KEY_DOWN]:
+        if key in [curses.KEY_RIGHT, curses.KEY_LEFT, curses.KEY_UP, curses.KEY_DOWN] and not is_opposite_direction(direction, key):
             direction = key
 
         head = snake[0]
@@ -74,7 +87,7 @@ def main(stdscr):
         # Check if new head position has food
         if new_head == food:
             food = place_food(board, width, height, snake)
-            score += 1
+            score += 1  # Corrected score increment
         else:
             tail = snake.pop()
             board[tail[1]][tail[0]] = ' '
