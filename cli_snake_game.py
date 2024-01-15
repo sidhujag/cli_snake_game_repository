@@ -60,23 +60,24 @@ def main(stdscr):
     direction = curses.KEY_RIGHT
     score = 0
 
+    # Initialize food position
     food = place_food(board, width, height, snake)
 
     while True:
         key = stdscr.getch()
 
-        if key in [curses.KEY_RIGHT, curses.KEY_LEFT, curses.KEY_UP, curses.KEY_DOWN] and not is_opposite_direction(direction, key):
-            direction = key
+        # Update the direction based on user input
+        if key in [curses.KEY_RIGHT, curses.KEY_LEFT, curses.KEY_UP, curses.KEY_DOWN]:
+            if not is_opposite_direction(direction, key):
+                direction = key
 
         head = snake[0]
         new_head = get_next_position(head, direction)
 
-        # Check for collision with walls or self
-        if new_head[0] < 0 or new_head[0] >= width:
-            new_head[0] = width - 1 if new_head[0] < 0 else 0
-        if new_head[1] < 0 or new_head[1] >= height:
-            new_head[1] = height - 1 if new_head[1] < 0 else 0
-        if new_head in snake:
+        # Check for collision with walls or self to end the game
+        if (new_head[0] < 0 or new_head[0] >= width or
+            new_head[1] < 0 or new_head[1] >= height or
+            new_head in snake):
             stdscr.addstr(height // 2, width // 2 - len("Game Over") // 2, "Game Over")
             stdscr.nodelay(0)
             stdscr.getch()
@@ -87,7 +88,7 @@ def main(stdscr):
         # Check if new head position has food
         if new_head == food:
             food = place_food(board, width, height, snake)
-            score += 1  # Corrected score increment
+            score += 1
         else:
             tail = snake.pop()
             board[tail[1]][tail[0]] = ' '
