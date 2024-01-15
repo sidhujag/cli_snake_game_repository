@@ -59,9 +59,11 @@ def main(stdscr):
         new_head = get_next_position(head, direction)
 
         # Check for collision with walls or self
-        if (new_head[0] >= width or new_head[0] < 0 or
-            new_head[1] >= height or new_head[1] < 0 or
-            new_head in snake):
+        if new_head[0] < 0 or new_head[0] >= width:
+            new_head[0] = width - 1 if new_head[0] < 0 else 0
+        if new_head[1] < 0 or new_head[1] >= height:
+            new_head[1] = height - 1 if new_head[1] < 0 else 0
+        if new_head in snake:
             stdscr.addstr(height // 2, width // 2 - len("Game Over") // 2, "Game Over")
             stdscr.nodelay(0)
             stdscr.getch()
