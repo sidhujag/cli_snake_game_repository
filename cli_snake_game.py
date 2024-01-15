@@ -98,23 +98,7 @@ def main(stdscr):
 
 if __name__ == '__main__':
     curses.wrapper(main)
-def create_snake(screen_width, screen_height):
-    # Initial snake co-ordinates
-    snake = [[screen_height//2, screen_width//4]]
-    return snake
-
-def create_food(screen_width, screen_height, snake):
-    food = None
-    while food is None:
-        food = [random.randint(1, screen_height-2), random.randint(1, screen_width-2)]
-        if food in snake:  # Prevent food from spawning on the snake
-            food = None
-    return food
-
-def print_score(stdscr, score):
-    stdscr.addstr(0, 2, 'Score: ' + str(score))
-
-def game(stdscr):
+def main(stdscr):
     curses.curs_set(0)
     stdscr.nodelay(1)
     stdscr.timeout(100)
@@ -162,7 +146,10 @@ def game(stdscr):
             stdscr.addch(tail[0], tail[1], ' ')
 
         stdscr.addch(snake[0][0], snake[0][1], curses.ACS_CKBOARD)
-        print_score(stdscr, score)
+        print_score(score)
+
+if __name__ == "__main__":
+    curses.wrapper(main)
             food = create_food(screen_width, screen_height, snake)
             stdscr.addch(food[0], food[1], '#')
             food = create_food(screen_width, screen_height, snake)
@@ -171,7 +158,10 @@ def game(stdscr):
             stdscr.addch(tail[0], tail[1], ' ')
 
         stdscr.addch(snake[0][0], snake[0][1], '*')
-        print_score(stdscr, score)
+        print_score(score)
+
+if __name__ == "__main__":
+    curses.wrapper(main)
 
         stdscr.addch(food[0], food[1], '*')
         stdscr.addch(snake[0][0], snake[0][1], '#')
@@ -182,23 +172,7 @@ if __name__ == "__main__":
 import random
 import curses
 
-def create_snake(screen_width, screen_height):
-    # Initial snake co-ordinates
-    snake = [[screen_height//2, screen_width//4]]
-    return snake
-
-def create_food(screen_width, screen_height, snake):
-    food = None
-    while food is None:
-        food = [random.randint(1, screen_height-2), random.randint(1, screen_width-2)]
-        if food in snake:  # Prevent food from spawning on the snake
-            food = None
-    return food
-
-def print_score(stdscr, score):
-    stdscr.addstr(0, 2, 'Score: ' + str(score))
-
-def game(stdscr):
+def main(stdscr):
     curses.curs_set(0)
     stdscr.nodelay(1)
     stdscr.timeout(100)
@@ -217,7 +191,7 @@ def game(stdscr):
         if snake[0][0] in [0, screen_height] or \
            snake[0][1]  in [0, screen_width] or \
            snake[0] in snake[1:]:
-            stdscr.addstr(screen_height//2, screen_width//2 - len("Game Over")//2, "Game Over")
+            stdscr.addstr(screen_height//2, screen_width//2 - len("Game Over")//2, "Game Over", curses.A_BOLD)
             stdscr.nodelay(0)
             stdscr.getch()
             break
@@ -245,30 +219,17 @@ def game(stdscr):
             stdscr.addch(tail[0], tail[1], ' ')
 
         stdscr.addch(snake[0][0], snake[0][1], '#')
-        print_score(stdscr, score)
+        print_score(score)
+
+if __name__ == "__main__":
+    curses.wrapper(main)
 
 if __name__ == "__main__":
     curses.wrapper(game)
 import random
 import curses
 
-def create_snake(screen_width, screen_height):
-    # Initial snake co-ordinates
-    snake = [[screen_height//2, screen_width//4]]
-    return snake
-
-def create_food(screen_width, screen_height, snake):
-    food = None
-    while food is None:
-        food = [random.randint(1, screen_height-2), random.randint(1, screen_width-2)]
-        if food in snake:  # Prevent food from spawning on the snake
-            food = None
-    return food
-
-def print_score(stdscr, score):
-    stdscr.addstr(0, 2, 'Score: ' + str(score))
-
-def game(stdscr):
+def main(stdscr):
     curses.curs_set(0)
     stdscr.nodelay(1)
     stdscr.timeout(100)
@@ -287,7 +248,7 @@ def game(stdscr):
         if snake[0][0] in [0, screen_height] or \
            snake[0][1]  in [0, screen_width] or \
            snake[0] in snake[1:]:
-            stdscr.addstr(screen_height//2, screen_width//2 - len("Game Over")//2, "Game Over")
+            stdscr.addstr(screen_height//2, screen_width//2 - len("Game Over")//2, "Game Over", curses.A_BOLD)
             stdscr.nodelay(0)
             stdscr.getch()
             break
@@ -315,30 +276,17 @@ def game(stdscr):
             stdscr.addch(tail[0], tail[1], ' ')
 
         stdscr.addch(snake[0][0], snake[0][1], '#')
-        print_score(stdscr, score)
+        print_score(score)
+
+if __name__ == "__main__":
+    curses.wrapper(main)
 
 if __name__ == "__main__":
     curses.wrapper(game)
 import random
 import curses
 
-def create_snake(screen_width, screen_height):
-    # Initial snake co-ordinates
-    snake = [[screen_height//2, screen_width//4]]
-    return snake
-
-def create_food(screen_width, screen_height, snake):
-    food = None
-    while food is None:
-        food = [random.randint(1, screen_height-2), random.randint(1, screen_width-2)]
-        if food in snake:  # Prevent food from spawning on the snake
-            food = None
-    return food
-
-def print_score(stdscr, score):
-    stdscr.addstr(0, 2, 'Score: ' + str(score))
-
-def game(stdscr):
+def main(stdscr):
     curses.curs_set(0)
     stdscr.nodelay(1)
     stdscr.timeout(100)
@@ -357,7 +305,7 @@ def game(stdscr):
         if snake[0][0] in [0, screen_height] or \
            snake[0][1]  in [0, screen_width] or \
            snake[0] in snake[1:]:
-            stdscr.addstr(screen_height//2, screen_width//2 - len("Game Over")//2, "Game Over")
+            stdscr.addstr(screen_height//2, screen_width//2 - len("Game Over")//2, "Game Over", curses.A_BOLD)
             stdscr.nodelay(0)
             stdscr.getch()
             break
@@ -385,7 +333,10 @@ def game(stdscr):
             stdscr.addch(tail[0], tail[1], ' ')
 
         stdscr.addch(snake[0][0], snake[0][1], '#')
-        print_score(stdscr, score)
+        print_score(score)
+
+if __name__ == "__main__":
+    curses.wrapper(main)
 
 if __name__ == "__main__":
     curses.wrapper(game)
